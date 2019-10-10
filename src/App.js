@@ -50,8 +50,15 @@ class App extends Component {
 		},
   }
 
+	handleDeleteItem = (e) => {
+    console.log(e.target)
+}	
+
+handleAddItem = (e) => {
+    console.log(e.target)
+}
+
   render() {
-    const { store } = this.props
     return (
       <main className='App'>
         <header className='App-header'>
@@ -63,6 +70,8 @@ class App extends Component {
               key={list.id}
               header={list.header}
               cards={list.cardIds.map(id => this.state.allCards[id])}
+              deleteClick={this.handleDeleteItem}
+              addCardClick={this.handleAddItem}
             />
           ))}
         </div>
