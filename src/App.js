@@ -68,18 +68,27 @@ class App extends Component {
 		},
   }
 
-	handleDeleteItem = (e) => {
-    const { lists, allCards } = this.state
-    const newList = lists.map(listObj => ({
-      ...listObj,
-      cardIds: listObj.cardIds.filter(id => id !== e)
-	}));
-	const newCards = omit(allCards, e);
+	handleDeleteItem = (itemId, listId) => {
+    const { allCards, lists } = this.state
+    const targetList = lists.filter(list => list.id === listId)
+    const newCardIds = targetList[0].cardIds.filter(card => card !== itemId )
+    const newList = lists.map(list => {
+      if(list.id === listId){
+        return {
+          ...list,
+          cardIds: newCardIds
+        }
+      }
+      else return list
+    }) 
     console.log(newList)
+
     this.setState({
       lists: newList,
-      allCards: newCards
+      addCards: allCards
     })
+//    console.log(itemId, listId)
+
 }	
 
 handleAddItem = (e) => {
@@ -116,6 +125,7 @@ handleAddItem = (e) => {
             <List
               key={list.id}
               id={list.id}
+              listId={list.id}
               header={list.header}
               cards={list.cardIds.map(id => this.state.allCards[id])}
               deleteClick={this.handleDeleteItem}
