@@ -94,7 +94,6 @@ handleAddItem = (e) => {
 		return listObj;
 	})
 
-	console.log(e)	
 	this.setState({
 		lists: newList,
 		allCards: {
