@@ -2,6 +2,24 @@ import React, { Component } from 'react';
 import List from './List'
 import './App.css';
 
+const newRandomCard = () => {
+	const id = Math.random().toString(36).substring(2, 4)
+	  + Math.random().toString(36).substring(2, 4);
+	return {
+	  id,
+	  title: `Random Card ${id}`,
+	  content: 'lorem ipsum',
+	}
+}
+
+function omit(obj, keyToOmit) {
+	return Object.entries(obj).reduce(
+	  (newObj, [key, value]) =>
+		  key === keyToOmit ? newObj : {...newObj, [key]: value},
+	  {}
+	);
+}
+
 class App extends Component {
   static defaultProps = {
     store: {
@@ -55,17 +73,38 @@ class App extends Component {
     const newList = lists.map(listObj => ({
       ...listObj,
       cardIds: listObj.cardIds.filter(id => id !== e)
-    }));
+	}));
+	const newCards = omit(allCards, e);
     console.log(newList)
     this.setState({
       lists: newList,
-      allCards: allCards
+      allCards: newCards
     })
 }	
 
 handleAddItem = (e) => {
-    console.log(e)
+	const newCards = newRandomCard();
+	const newList = this.state.lists.map(listObj => {
+		if(listObj.id === e) {
+			return {
+				...listObj,
+				cardIds: [...listObj.cardIds, newCards.id]
+			}
+		} 
+		return listObj;
+	})
+
+	console.log(e)	
+	this.setState({
+		lists: newList,
+		allCards: {
+			...this.state.allCards,
+			[newCards.id]: newCards
+		}
+	})
 }
+
+
 
   render() {
     return (
